@@ -1,0 +1,34 @@
+/*-- scss:defaults --*/
+$font-family-sans-serif: 'Inter', system-ui, sans-serif;
+$font-family-monospace: 'JetBrains Mono', monospace;
+$headings-font-family: 'Lora', Georgia, serif;
+
+// Palette — deep slate dark
+$body-bg:    #0f172a;
+$body-color: #e2e8f0;
+$primary:    #0f172a;
+$secondary:  #64748b;
+$link-color: #f59e0b;
+$link-hover-color: #fbbf24;
+
+$navbar-bg: rgba(15, 23, 42, 0.96);
+$navbar-fg: #e2e8f0;
+$navbar-hl: #f59e0b;
+$footer-bg: #020617;
+$footer-fg: #64748b;
+
+$card-bg: #1e293b;
+$card-border-color: #334155;
+$border-color: #334155;
+
+/*-- scss:rules --*/
+:root {
+  --accent: #f59e0b;
+  --accent-light: #1e293b;
+  --surface: #1e293b;
+  --surface-alt: #0f172a;
+  --border: #334155;
+  --muted: #94a3b8;
+  --ink: #f1f5f9;
+  --ink-soft: #cbd5e1;
+}

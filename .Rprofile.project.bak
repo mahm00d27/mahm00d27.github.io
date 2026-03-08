@@ -1,0 +1,2 @@
+Sys.setenv(PATH = paste("C:/Program Files/rtools44/usr/bin", Sys.getenv("PATH"), sep=";"))
+source("renv/activate.R")

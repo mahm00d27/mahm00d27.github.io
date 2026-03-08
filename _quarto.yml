@@ -1,0 +1,84 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Mahmoodur Rahman"
+  description: "Physician · Epidemiologist · Data Scientist · Business Analyst at Stroke Services BC"
+  site-url: "https://mahm00d27.github.io"
+  favicon: "assets/favicon.png"
+  open-graph:
+    title: "Mahmoodur Rahman — Physician & Data Scientist"
+    description: "Bridging clinical medicine, global health research, and data science."
+  twitter-card:
+    creator: "@mahm00d27"
+    card-style: summary_large_image
+
+  navbar:
+    pinned: true
+    background: "primary"
+    logo-alt: "MR"
+    title: false
+    left:
+      - text: "About"
+        href: "index.html#about"
+      - text: "Experience"
+        href: "index.html#experience"
+      - text: "Public Health"
+        href: "index.html#public-health"
+      - text: "Data Science"
+        href: "index.html#data-science"
+      - text: "Publications"
+        href: "index.html#publications"
+      - text: "Education"
+        href: "index.html#education"
+      - text: "Credentials"
+        href: "index.html#credentials"
+      - text: "Built with"
+        href: "index.html#built-with"
+    right:
+      - icon: linkedin
+        href: "https://www.linkedin.com/in/drmrahman/"
+        aria-label: LinkedIn
+        target: _blank
+      - icon: github
+        href: "https://github.com/mahm00d27"
+        aria-label: GitHub
+        target: _blank
+      - icon: envelope
+        href: "mailto:mahmoodnnb@gmail.com"
+        aria-label: Email
+
+  page-footer:
+    background: "dark"
+    left: |
+      © 2026 Mahmoodur Rahman · North Vancouver, BC
+    center: |
+      Built with [Quarto](https://quarto.org) & R
+    right:
+      - icon: linkedin
+        href: "https://www.linkedin.com/in/drmrahman/"
+        target: _blank
+      - icon: github
+        href: "https://github.com/mahm00d27"
+        target: _blank
+      - icon: twitter
+        href: "https://twitter.com/mahm00d27"
+        target: _blank
+
+format:
+  html:
+    theme:
+      light: [flatly, assets/light.scss]
+      dark:  [darkly, assets/dark.scss]
+    css: assets/style.css
+    toc: false
+    anchor-sections: false
+    smooth-scroll: true
+    include-in-header: assets/head.html
+
+execute:
+  freeze: auto
+  echo: false
+  warning: false
+  message: false

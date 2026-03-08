@@ -1,0 +1,35 @@
+/*-- scss:defaults --*/
+$font-family-sans-serif: 'Inter', system-ui, sans-serif;
+$font-family-monospace: 'JetBrains Mono', monospace;
+$headings-font-family: 'Lora', Georgia, serif;
+
+// Palette — warm cream light
+$body-bg:    #faf8f4;
+$body-color: #1c1917;
+$primary:    #1c1917;
+$secondary:  #78716c;
+$success:    #16a34a;
+$link-color: #b45309;
+$link-hover-color: #92400e;
+
+$navbar-bg: rgba(250, 248, 244, 0.96);
+$navbar-fg: #1c1917;
+$navbar-hl: #b45309;
+$footer-bg: #1c1917;
+$footer-fg: #a8a29e;
+
+$card-bg: #ffffff;
+$card-border-color: #e7e5e4;
+$border-color: #e7e5e4;
+
+/*-- scss:rules --*/
+:root {
+  --accent: #b45309;
+  --accent-light: #fef3c7;
+  --surface: #ffffff;
+  --surface-alt: #f5f3ef;
+  --border: #e7e5e4;
+  --muted: #78716c;
+  --ink: #1c1917;
+  --ink-soft: #44403c;
+}

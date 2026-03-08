@@ -1,0 +1,421 @@
+---
+title: ""
+format:
+  html:
+    page-layout: full
+    toc: false
+include-after-body:
+  text: |
+    <script>
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+    </script>
+---
+
+```{r setup, include=FALSE}
+source("R/data.R")
+source("R/helpers.R")
+```
+
+```{=html}
+<section id="top" class="hero">
+<div class="hero-left">
+  <div class="hero-label">Physician · Epidemiologist · Data Scientist</div>
+  <h1 class="hero-name">Mahmoodur<br><em>Rahman</em></h1>
+  <p class="hero-tagline">Bridging clinical medicine, global health research, and modern data science to improve population health outcomes across Canada and globally.</p>
+  <div class="hero-actions">
+    <a href="#experience" class="btn-ink">View my work →</a>
+    <a href="mailto:mahmoodnnb@gmail.com" class="btn-ghost">Get in touch</a>
+  </div>
+</div>
+<div class="hero-right">
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Peer-reviewed publications</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Graduate degrees</div></div>
+    <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Years in health research</div></div>
+    <div class="stat"><div class="stat-num">BC</div><div class="stat-label">Currently at PHSA, Vancouver</div></div>
+  </div>
+  <div class="social-row">
+    <a href="https://www.linkedin.com/in/drmrahman/" class="social-chip" target="_blank">in LinkedIn</a>
+    <a href="https://github.com/mahm00d27" class="social-chip" target="_blank">&#9691; GitHub</a>
+    <a href="https://scholar.google.com/citations?user=EuKI7bAAAAAJ" class="social-chip" target="_blank">Scholar</a>
+    <a href="https://orcid.org/0000-0003-1586-1324" class="social-chip" target="_blank">ORCID</a>
+    <a href="https://www.researchgate.net/profile/Mahmoodur-Rahman" class="social-chip" target="_blank">ResearchGate</a>
+    <a href="https://www.ncbi.nlm.nih.gov/myncbi/1ZG9s8OACEqA8/bibliography/public/" class="social-chip" target="_blank">PubMed</a>
+    <a href="https://datascienceandhealth.ubc.ca/people/mahmoodur-rahman" class="social-chip" target="_blank">UBC DS&amp;H</a>
+    <a href="https://bsky.app/profile/mahm00d27.bsky.social" class="social-chip" target="_blank">Bluesky</a>
+    <a href="https://twitter.com/mahm00d27" class="social-chip" target="_blank">Twitter</a>
+  </div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="about" class="port-section-alt">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">About</div>
+  <h2 class="section-title">A physician who speaks the language of data</h2>
+  <div class="section-divider"></div>
+</div>
+<div class="about-grid">
+  <div class="fade-in">
+    <p>I was born in Jeddah, the vibrant port city of Saudi Arabia. In 1998, during the FIFA World Cup, I moved to Bangladesh — my motherland. Driven by a deep interest in health and well-being, I earned my medical degree and took the Hippocratic Oath in 2013. My true passion lay in <strong>public health</strong> rather than individual patient care.</p>
+    <p>I began my public health journey at <a href="https://www.icddrb.org/" target="_blank"><strong>icddr,b</strong></a>, one of the world's leading global health research institutions. My first assignment took me to Zakiganj — a remote, low-resource community near Bangladesh's northeastern border. I went on to collaborate with researchers from <strong>Harvard Medical School</strong>, <strong>Johns Hopkins Bloomberg School of Public Health</strong>, <strong>WHO</strong>, <strong>UNICEF</strong>, and the <strong>Gates Foundation</strong>.</p>
+    <p>At the onset of COVID-19, I became fascinated by Machine Learning and AI in public health. This led me to the <a href="https://masterdatascience.ubc.ca/" target="_blank"><strong>Master of Data Science program at UBC</strong></a> — I'm proud to be the first from my country admitted to the program. Currently, I work as a <strong>Business Analyst at <a href="http://www.phsa.ca/our-services/programs-services/stroke-services-bc" target="_blank">Stroke Services BC (PHSA)</a></strong>, where our mission is to reduce the incidence of stroke and ensure the best possible outcomes for patients across British Columbia.</p>
+    <p>Outside of work I'm an extrovert with a contagious sense of humor — I love exploring new places, meeting new people, cooking, drumming, hiking, and music. Above all, I'm a family man who cherishes time with my wife and kids.</p>
+  </div>
+  <div class="about-sidebar fade-in">
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">Contact</div>
+      <a href="mailto:mahmoodnnb@gmail.com">mahmoodnnb@gmail.com</a>
+      <a href="mailto:mahmoodur.rahman@phsa.ca">mahmoodur.rahman@phsa.ca</a>
+      <p>+1 (672) 5158 148</p>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">Location</div>
+      <p>267 Orwell Street<br>North Vancouver, BC V7J 0E7<br>Canada</p>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">Languages</div>
+      <p>Bengali (Native) · English (Fluent)<br>Arabic (Elementary) · French (Beginner)</p>
+    </div>
+    <div class="sidebar-card">
+      <div class="sidebar-card-label">Award</div>
+      <p>GBD Technical Workshop <strong>Full-funded Scholarship</strong> 2020<br>
+      <span style="font-size:0.8rem;color:var(--muted)">Issued by IHME, University of Washington (Cancelled — COVID-19)</span></p>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="experience" class="port-section">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">Experience</div>
+  <h2 class="section-title">Professional journey</h2>
+  <div class="section-divider"></div>
+</div>
+<div class="timeline">
+```
+
+```{r experience-timeline, results='asis', echo=FALSE}
+for (item in experience) {
+  cls <- if (isTRUE(item$current)) "tl-item active fade-in" else "tl-item fade-in"
+  org_html <- if (!is.null(item$link)) sprintf('<a href="%s" target="_blank">%s</a>', item$link, item$org) else item$org
+  cat(sprintf('<div class="%s">\n', cls))
+  cat(sprintf('<div class="tl-period">%s &middot; %s</div>\n', item$period, item$location))
+  cat(sprintf('<div class="tl-role">%s</div>\n', item$role))
+  cat(sprintf('<div class="tl-org">%s</div>\n', org_html))
+  cat('<div class="tl-body">\n')
+  cat(bullets_html(item$bullets))
+  cat('\n</div></div>\n')
+}
+```
+
+```{=html}
+</div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="public-health" class="port-section-alt">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">Public Health</div>
+  <h2 class="section-title">Public health projects</h2>
+  <div class="section-divider"></div>
+</div>
+<div class="card-grid card-grid-2">
+```
+
+```{r ph-projects, results='asis', echo=FALSE}
+for (p in ph_projects) {
+  cat('<div class="p-card fade-in">\n')
+  cat(sprintf('<div class="p-card-period">%s</div>\n', p$period))
+  cat(sprintf('<div class="p-card-org">%s</div>\n', p$org))
+  cat(sprintf('<h3>%s</h3>\n', p$title))
+  cat(sprintf('<p>%s</p>\n', p$desc))
+  cat(tags_html(p$tags))
+  cat(link_btn(p$link))
+  cat('\n</div>\n')
+}
+```
+
+```{=html}
+</div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="data-science" class="port-section">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">Data Science</div>
+  <h2 class="section-title">Data science projects</h2>
+  <div class="section-divider"></div>
+</div>
+<div class="card-grid card-grid-3">
+```
+
+```{r ds-projects, results='asis', echo=FALSE}
+for (p in ds_projects) {
+  cat('<div class="p-card fade-in">\n')
+  cat(sprintf('<div class="p-card-period">%s</div>\n', p$period))
+  cat(sprintf('<div class="p-card-org">%s</div>\n', p$org))
+  cat(sprintf('<h3>%s</h3>\n', p$title))
+  cat(sprintf('<p>%s</p>\n', p$desc))
+  cat(tags_html(p$tags))
+  cat(link_btn(p$link))
+  cat('\n</div>\n')
+}
+```
+
+```{=html}
+</div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="publications" class="port-section-alt">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">Publications</div>
+  <h2 class="section-title">Peer-reviewed scholarly work</h2>
+  <div class="section-divider"></div>
+</div>
+<ul class="pub-list">
+```
+
+```{r publications, results='asis', echo=FALSE}
+for (pub in publications) {
+  title_html <- if (!is.null(pub$link)) sprintf('<a href="%s" target="_blank">%s</a>', pub$link, pub$title) else pub$title
+  doi_html   <- if (!is.null(pub$doi) && nzchar(pub$doi)) sprintf('<a class="pub-doi" href="https://doi.org/%s" target="_blank">doi:%s</a>', pub$doi, pub$doi) else ""
+  cat('<li class="pub-item fade-in">\n')
+  cat(sprintf('<div class="pub-year">%s</div>\n', pub$year))
+  cat('<div>\n')
+  cat(sprintf('<div class="pub-title">%s</div>\n', title_html))
+  cat(sprintf('<div class="pub-authors">%s</div>\n', pub$authors))
+  cat(sprintf('<div class="pub-journal"><em>%s</em> &middot; %s</div>\n', pub$journal, pub$detail))
+  cat(doi_html)
+  cat('\n</div></li>\n')
+}
+```
+
+```{=html}
+</ul>
+<div class="fade-in" style="margin-top:2.5rem;display:flex;flex-wrap:wrap;gap:0.75rem;">
+```
+
+```{r pub-links, results='asis', echo=FALSE}
+cat(sprintf('<a href="%s" class="btn-ink" target="_blank">PubMed &#8594;</a>\n', links$pubmed))
+cat(sprintf('<a href="%s" class="btn-ghost" target="_blank">Google Scholar &#8594;</a>\n', links$scholar))
+cat(sprintf('<a href="%s" class="btn-ghost" target="_blank">ResearchGate &#8594;</a>\n', links$researchgate))
+cat(sprintf('<a href="%s" class="btn-ghost" target="_blank">ORCID &#8594;</a>\n', links$orcid))
+```
+
+```{=html}
+</div>
+<div class="fade-in" style="margin-top:2rem;padding:1.25rem;background:var(--surface);border:1px solid var(--border);font-size:0.875rem;color:var(--ink-soft);">
+<strong>Selected reports &amp; abstracts:</strong>
+Assessment of the MaMoni HSS Project in Bangladesh &middot;
+Assessment of licensing status &amp; MNH readiness of private inpatient healthcare facilities &middot;
+Findings from QoC Survey, Manikganj District (MaMoni MNCSP) &middot;
+Stroke Endovascular Thrombectomy — Time Delays of Repeated Imaging (CAR 2025) &middot;
+<a href="https://www.jhsph.edu/research/centers-and-institutes/international-center-for-maternal-and-newborn-health/field-team-stories.html" target="_blank">Blog: <em>Confronting tradition to save newborns</em></a>, Johns Hopkins Bloomberg School of Public Health
+</div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="education" class="port-section">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">Education</div>
+  <h2 class="section-title">Academic background</h2>
+  <div class="section-divider"></div>
+</div>
+<h3 class="subsection-label">Degrees</h3>
+<div class="card-grid card-grid-3">
+```
+
+```{r edu-degrees, results='asis', echo=FALSE}
+for (e in education$degrees) {
+  school_html <- if (!is.null(e$link)) sprintf('<a href="%s" target="_blank">%s</a>', e$link, e$school) else e$school
+  cat('<div class="edu-card fade-in">\n')
+  cat(sprintf('<div class="edu-year">%s</div>\n', e$year))
+  cat(sprintf('<div class="edu-degree">%s</div>\n', e$degree))
+  cat(sprintf('<div class="edu-school">%s &middot; %s</div>\n', school_html, e$location))
+  if (nzchar(e$note)) cat(sprintf('<div class="edu-note">%s</div>\n', e$note))
+  cat('</div>\n')
+}
+```
+
+```{=html}
+</div>
+<h3 class="subsection-label" style="margin-top:3rem;">Training &amp; Continuing Education</h3>
+<div class="card-grid card-grid-3">
+```
+
+```{r edu-training, results='asis', echo=FALSE}
+for (e in education$training) {
+  school_html <- if (!is.null(e$link)) sprintf('<a href="%s" target="_blank">%s</a>', e$link, e$school) else e$school
+  cat('<div class="edu-card fade-in">\n')
+  cat(sprintf('<div class="edu-year">%s</div>\n', e$year))
+  cat(sprintf('<div class="edu-degree">%s</div>\n', e$degree))
+  cat(sprintf('<div class="edu-school">%s</div>\n', school_html))
+  if (nzchar(e$note)) cat(sprintf('<div class="edu-note">%s</div>\n', e$note))
+  cat('</div>\n')
+}
+```
+
+```{=html}
+</div>
+<div class="fade-in" style="margin-top:3rem;padding:1.5rem;background:var(--surface);border:1px solid var(--border);">
+<div class="subsection-label" style="margin-bottom:0.75rem;">MDS Coursework — UBC 2022</div>
+<p style="font-size:0.82rem;color:var(--ink-soft);line-height:1.8;margin:0;">
+DSCI 521 Computing Platforms &middot; DSCI 511 Programming for Data Science &middot; DSCI 523 Data Manipulation &middot; DSCI 551 Descriptive Statistics &amp; Probability &middot; DSCI 571 Supervised Learning I &middot; DSCI 531 Data Visualization I &middot; DSCI 552 Statistical Inference I &middot; DSCI 512 Algorithms &amp; Data Structures &middot; DSCI 561 Regression I &middot; DSCI 573 Feature &amp; Model Selection &middot; DSCI 522 Data Science Workflows &middot; DSCI 513 Databases &amp; Data Retrieval &middot; DSCI 572 Supervised Learning II &middot; DSCI 562 Regression II &middot; DSCI 542 Communication &amp; Argumentation &middot; DSCI 524 Collaborative Software Development &middot; DSCI 553 Statistical Inference II &middot; DSCI 532 Data Visualization II &middot; DSCI 563 Unsupervised Learning &middot; DSCI 574 Spatial &amp; Temporal Models &middot; DSCI 575 Advanced Machine Learning &middot; DSCI 541 Privacy, Ethics &amp; Security &middot; DSCI 525 Web &amp; Cloud Computing &middot; DSCI 554 Experimentation &amp; Causal Inference &middot; DSCI 591 Capstone Project
+</p>
+</div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="credentials" class="port-section-alt">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">Credentials</div>
+  <h2 class="section-title">Certifications, affiliations &amp; service</h2>
+  <div class="section-divider"></div>
+</div>
+<div class="row g-5">
+<div class="col-lg-5">
+<h3 class="subsection-label">Certifications &amp; Licenses</h3>
+<div class="d-flex flex-column gap-2">
+```
+
+```{r certs, results='asis', echo=FALSE}
+for (cert in certifications) {
+  name_html <- if (!is.null(cert$link)) sprintf('<a href="%s" target="_blank" style="text-decoration:none;color:inherit;">%s</a>', cert$link, cert$name) else cert$name
+  cat('<div class="cert-card fade-in">\n')
+  cat(sprintf('<div class="cert-name">%s</div>\n', name_html))
+  cat(sprintf('<div class="cert-issuer">%s</div>\n', cert$issuer))
+  if (!is.null(cert$date) && nzchar(cert$date)) cat(sprintf('<div class="cert-date">%s</div>\n', cert$date))
+  cat('</div>\n')
+}
+```
+
+```{=html}
+</div>
+</div>
+<div class="col-lg-7">
+<h3 class="subsection-label">Public Health Affiliations</h3>
+<ul class="affil-list fade-in">
+```
+
+```{r affil-ph, results='asis', echo=FALSE}
+for (a in affiliations$ph) cat(sprintf('<li>%s</li>\n', affil_link(a)))
+```
+
+```{=html}
+</ul>
+<h3 class="subsection-label" style="margin-top:2rem;">Data Science Affiliations</h3>
+<ul class="affil-list fade-in">
+```
+
+```{r affil-ds, results='asis', echo=FALSE}
+for (a in affiliations$ds) cat(sprintf('<li>%s</li>\n', affil_link(a)))
+```
+
+```{=html}
+</ul>
+<h3 class="subsection-label" style="margin-top:2rem;">Mentorship &amp; Service</h3>
+<ul class="affil-list fade-in">
+```
+
+```{r mentorship, results='asis', echo=FALSE}
+for (m in mentorship) {
+  label <- if (!is.null(m$link)) sprintf('<a href="%s" target="_blank">%s</a>', m$link, m$event) else m$event
+  if (!is.null(m$date)) label <- paste0(label, sprintf(' <span style="color:var(--muted);font-size:0.8em;">&middot; %s</span>', m$date))
+  cat(sprintf('<li>%s</li>\n', label))
+}
+```
+
+```{=html}
+</ul>
+</div>
+</div>
+</div>
+</section>
+```
+
+```{=html}
+<section id="built-with" class="port-section">
+<div class="port-container">
+<div class="fade-in">
+  <div class="section-eyebrow">Open source</div>
+  <h2 class="section-title">Built with</h2>
+  <div class="section-divider"></div>
+  <p style="max-width:560px;">This site is open source, statically rendered, and self-hosted — no databases, no trackers, no ads. Every component used to build it is free and open source.</p>
+</div>
+<div class="built-grid fade-in">
+  <a href="https://quarto.org" target="_blank" class="built-card">
+    <div class="built-icon">Q</div>
+    <div class="built-body"><div class="built-name">Quarto 1.5</div><div class="built-role">Site framework</div><div class="built-desc">Open-source scientific publishing system. Converts .qmd files into a full website — handles rendering, theming, and navigation.</div></div>
+  </a>
+  <a href="https://www.r-project.org" target="_blank" class="built-card">
+    <div class="built-icon">R</div>
+    <div class="built-body"><div class="built-name">R 4.4</div><div class="built-role">Content engine</div><div class="built-desc">All portfolio content — publications, projects, experience — lives in R data structures and is rendered to HTML dynamically at build time.</div></div>
+  </a>
+  <a href="https://rstudio.github.io/renv/" target="_blank" class="built-card">
+    <div class="built-icon">rv</div>
+    <div class="built-body"><div class="built-name">renv 1.1</div><div class="built-role">Package reproducibility</div><div class="built-desc">Locks exact R package versions in renv.lock — ensuring the site renders identically on every machine and every CI build.</div></div>
+  </a>
+  <a href="https://pages.github.com" target="_blank" class="built-card">
+    <div class="built-icon">GH</div>
+    <div class="built-body"><div class="built-name">GitHub Pages</div><div class="built-role">Hosting</div><div class="built-desc">Free static site hosting directly from the GitHub repository. No server costs, no configuration — just push and the site is live.</div></div>
+  </a>
+  <a href="https://github.com/features/actions" target="_blank" class="built-card">
+    <div class="built-icon">CI</div>
+    <div class="built-body"><div class="built-name">GitHub Actions</div><div class="built-role">CI/CD pipeline</div><div class="built-desc">Every git push to main automatically triggers a Quarto render and redeploy. No manual build steps — the site updates itself.</div></div>
+  </a>
+  <a href="https://getbootstrap.com" target="_blank" class="built-card">
+    <div class="built-icon">B</div>
+    <div class="built-body"><div class="built-name">Bootstrap 5</div><div class="built-role">CSS framework</div><div class="built-desc">Responsive grid and utilities via Quarto's built-in Bootstrap integration. Custom SCSS overrides provide the light and dark palettes.</div></div>
+  </a>
+  <a href="https://fonts.google.com" target="_blank" class="built-card">
+    <div class="built-icon">Aa</div>
+    <div class="built-body"><div class="built-name">Google Fonts</div><div class="built-role">Typography</div><div class="built-desc">Lora (serif headings) · Inter (body) · JetBrains Mono (labels &amp; code). Loaded via a single Google Fonts request.</div></div>
+  </a>
+  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl" target="_blank" class="built-card">
+    <div class="built-icon">JS</div>
+    <div class="built-body"><div class="built-name">Intl API</div><div class="built-role">Timezone detection</div><div class="built-desc">Vanilla JS Intl.DateTimeFormat reads the visitor's local timezone and automatically selects light (06:00–20:00) or dark mode at page load.</div></div>
+  </a>
+  <a href="https://sass-lang.com" target="_blank" class="built-card">
+    <div class="built-icon">S</div>
+    <div class="built-body"><div class="built-name">Sass / SCSS</div><div class="built-role">Theming</div><div class="built-desc">Two SCSS files define the complete light and dark palettes — colors, fonts, and Bootstrap variable overrides — compiled by Quarto at build time.</div></div>
+  </a>
+</div>
+<div class="mit-notice fade-in">
+  <div class="mit-badge">MIT</div>
+  <div class="mit-text">
+    <strong>Open source under the MIT License.</strong>
+    The source code for this site is freely available to use, modify, and redistribute.
+    See the <a href="https://github.com/mahm00d27/mahm00d27.github.io/blob/main/LICENSE" target="_blank">LICENSE</a> file on GitHub.
+  </div>
+</div>
+</div>
+</section>
+```

@@ -1,0 +1,28 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script>
+// ── Timezone-based automatic dark / light mode ──────────────────
+(function () {
+  function isDaytime() {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const now = new Date();
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, hour: 'numeric', hour12: false
+      });
+      const hour = parseInt(formatter.format(now), 10);
+      return hour >= 6 && hour < 20; // light 06:00–20:00
+    } catch (e) { return true; }
+  }
+
+  const stored = localStorage.getItem('quarto-color-scheme');
+  if (!stored) {
+    // Only auto-set if user has never manually toggled
+    const scheme = isDaytime() ? 'default' : 'dark';
+    document.documentElement.setAttribute('data-bs-theme', scheme === 'dark' ? 'dark' : 'light');
+    localStorage.setItem('quarto-color-scheme', scheme);
+  }
+})();
+</script>
