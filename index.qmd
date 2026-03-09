@@ -7,21 +7,42 @@ format:
 include-after-body:
   text: |
     <script>
+    // Intersection observer — fade in on scroll
     const io = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
       });
     }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+    // Built-with modal
+    function openBuiltWith()  { document.getElementById('bw-modal').style.display='flex'; document.body.style.overflow='hidden'; }
+    function closeBuiltWith() { document.getElementById('bw-modal').style.display='none';  document.body.style.overflow=''; }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBuiltWith(); });
+    document.addEventListener('click',   e => { if (e.target.id === 'bw-modal') closeBuiltWith(); });
     </script>
 ---
 
 ```{r setup, include=FALSE}
-source("R/data.R")
-source("R/helpers.R")
+# ── Load data ────────────────────────────────────────────────────────────────
+source(here::here("data", "portfolio_data.R"))
+
+# ── Load modules ─────────────────────────────────────────────────────────────
+box::use(
+  modules/renderers[
+    render_experience,
+    render_projects,
+    render_publications,
+    render_edu_cards,
+    render_certs,
+    render_affils,
+    render_mentorship
+  ]
+)
 ```
 
 ```{=html}
+<!-- ═══════════════════════════════ HERO ══════════════════════════════════ -->
 <section id="top" class="hero">
 <div class="hero-left">
   <div class="hero-label">Physician · Epidemiologist · Data Scientist</div>
@@ -30,6 +51,7 @@ source("R/helpers.R")
   <div class="hero-actions">
     <a href="#experience" class="btn-ink">View my work →</a>
     <a href="mailto:mahmoodnnb@gmail.com" class="btn-ghost">Get in touch</a>
+    <a href="cv/mahmoodur_resume.pdf" class="btn-ghost" download="mahmoodur_resume.pdf">⬇ Download CV</a>
   </div>
 </div>
 <div class="hero-right">
@@ -40,8 +62,8 @@ source("R/helpers.R")
     <div class="stat"><div class="stat-num">BC</div><div class="stat-label">Currently at PHSA, Vancouver</div></div>
   </div>
   <div class="social-row">
-    <a href="https://www.linkedin.com/in/drmrahman/" class="social-chip" target="_blank">in LinkedIn</a>
-    <a href="https://github.com/mahm00d27" class="social-chip" target="_blank">&#9691; GitHub</a>
+    <a href="https://www.linkedin.com/in/drmrahman/" class="social-chip" target="_blank">LinkedIn</a>
+    <a href="https://github.com/mahm00d27" class="social-chip" target="_blank">GitHub</a>
     <a href="https://scholar.google.com/citations?user=EuKI7bAAAAAJ" class="social-chip" target="_blank">Scholar</a>
     <a href="https://orcid.org/0000-0003-1586-1324" class="social-chip" target="_blank">ORCID</a>
     <a href="https://www.researchgate.net/profile/Mahmoodur-Rahman" class="social-chip" target="_blank">ResearchGate</a>
@@ -55,6 +77,7 @@ source("R/helpers.R")
 ```
 
 ```{=html}
+<!-- ═══════════════════════════════ ABOUT ════════════════════════════════ -->
 <section id="about" class="port-section-alt">
 <div class="port-container">
 <div class="fade-in">
@@ -96,6 +119,7 @@ source("R/helpers.R")
 ```
 
 ```{=html}
+<!-- ═══════════════════════════ EXPERIENCE ═══════════════════════════════ -->
 <section id="experience" class="port-section">
 <div class="port-container">
 <div class="fade-in">
@@ -107,17 +131,7 @@ source("R/helpers.R")
 ```
 
 ```{r experience-timeline, results='asis', echo=FALSE}
-for (item in experience) {
-  cls <- if (isTRUE(item$current)) "tl-item active fade-in" else "tl-item fade-in"
-  org_html <- if (!is.null(item$link)) sprintf('<a href="%s" target="_blank">%s</a>', item$link, item$org) else item$org
-  cat(sprintf('<div class="%s">\n', cls))
-  cat(sprintf('<div class="tl-period">%s &middot; %s</div>\n', item$period, item$location))
-  cat(sprintf('<div class="tl-role">%s</div>\n', item$role))
-  cat(sprintf('<div class="tl-org">%s</div>\n', org_html))
-  cat('<div class="tl-body">\n')
-  cat(bullets_html(item$bullets))
-  cat('\n</div></div>\n')
-}
+render_experience(experience)
 ```
 
 ```{=html}
@@ -127,6 +141,7 @@ for (item in experience) {
 ```
 
 ```{=html}
+<!-- ═══════════════════════════ PUBLIC HEALTH ════════════════════════════ -->
 <section id="public-health" class="port-section-alt">
 <div class="port-container">
 <div class="fade-in">
@@ -138,16 +153,7 @@ for (item in experience) {
 ```
 
 ```{r ph-projects, results='asis', echo=FALSE}
-for (p in ph_projects) {
-  cat('<div class="p-card fade-in">\n')
-  cat(sprintf('<div class="p-card-period">%s</div>\n', p$period))
-  cat(sprintf('<div class="p-card-org">%s</div>\n', p$org))
-  cat(sprintf('<h3>%s</h3>\n', p$title))
-  cat(sprintf('<p>%s</p>\n', p$desc))
-  cat(tags_html(p$tags))
-  cat(link_btn(p$link))
-  cat('\n</div>\n')
-}
+render_projects(ph_projects)
 ```
 
 ```{=html}
@@ -157,6 +163,7 @@ for (p in ph_projects) {
 ```
 
 ```{=html}
+<!-- ═══════════════════════════ DATA SCIENCE ════════════════════════════ -->
 <section id="data-science" class="port-section">
 <div class="port-container">
 <div class="fade-in">
@@ -168,16 +175,7 @@ for (p in ph_projects) {
 ```
 
 ```{r ds-projects, results='asis', echo=FALSE}
-for (p in ds_projects) {
-  cat('<div class="p-card fade-in">\n')
-  cat(sprintf('<div class="p-card-period">%s</div>\n', p$period))
-  cat(sprintf('<div class="p-card-org">%s</div>\n', p$org))
-  cat(sprintf('<h3>%s</h3>\n', p$title))
-  cat(sprintf('<p>%s</p>\n', p$desc))
-  cat(tags_html(p$tags))
-  cat(link_btn(p$link))
-  cat('\n</div>\n')
-}
+render_projects(ds_projects)
 ```
 
 ```{=html}
@@ -187,6 +185,7 @@ for (p in ds_projects) {
 ```
 
 ```{=html}
+<!-- ═══════════════════════════ PUBLICATIONS ════════════════════════════ -->
 <section id="publications" class="port-section-alt">
 <div class="port-container">
 <div class="fade-in">
@@ -198,18 +197,7 @@ for (p in ds_projects) {
 ```
 
 ```{r publications, results='asis', echo=FALSE}
-for (pub in publications) {
-  title_html <- if (!is.null(pub$link)) sprintf('<a href="%s" target="_blank">%s</a>', pub$link, pub$title) else pub$title
-  doi_html   <- if (!is.null(pub$doi) && nzchar(pub$doi)) sprintf('<a class="pub-doi" href="https://doi.org/%s" target="_blank">doi:%s</a>', pub$doi, pub$doi) else ""
-  cat('<li class="pub-item fade-in">\n')
-  cat(sprintf('<div class="pub-year">%s</div>\n', pub$year))
-  cat('<div>\n')
-  cat(sprintf('<div class="pub-title">%s</div>\n', title_html))
-  cat(sprintf('<div class="pub-authors">%s</div>\n', pub$authors))
-  cat(sprintf('<div class="pub-journal"><em>%s</em> &middot; %s</div>\n', pub$journal, pub$detail))
-  cat(doi_html)
-  cat('\n</div></li>\n')
-}
+render_publications(publications, links)
 ```
 
 ```{=html}
@@ -239,6 +227,7 @@ Stroke Endovascular Thrombectomy — Time Delays of Repeated Imaging (CAR 2025) 
 ```
 
 ```{=html}
+<!-- ═══════════════════════════ EDUCATION ════════════════════════════════ -->
 <section id="education" class="port-section">
 <div class="port-container">
 <div class="fade-in">
@@ -251,15 +240,7 @@ Stroke Endovascular Thrombectomy — Time Delays of Repeated Imaging (CAR 2025) 
 ```
 
 ```{r edu-degrees, results='asis', echo=FALSE}
-for (e in education$degrees) {
-  school_html <- if (!is.null(e$link)) sprintf('<a href="%s" target="_blank">%s</a>', e$link, e$school) else e$school
-  cat('<div class="edu-card fade-in">\n')
-  cat(sprintf('<div class="edu-year">%s</div>\n', e$year))
-  cat(sprintf('<div class="edu-degree">%s</div>\n', e$degree))
-  cat(sprintf('<div class="edu-school">%s &middot; %s</div>\n', school_html, e$location))
-  if (nzchar(e$note)) cat(sprintf('<div class="edu-note">%s</div>\n', e$note))
-  cat('</div>\n')
-}
+render_edu_cards(education$degrees)
 ```
 
 ```{=html}
@@ -269,15 +250,7 @@ for (e in education$degrees) {
 ```
 
 ```{r edu-training, results='asis', echo=FALSE}
-for (e in education$training) {
-  school_html <- if (!is.null(e$link)) sprintf('<a href="%s" target="_blank">%s</a>', e$link, e$school) else e$school
-  cat('<div class="edu-card fade-in">\n')
-  cat(sprintf('<div class="edu-year">%s</div>\n', e$year))
-  cat(sprintf('<div class="edu-degree">%s</div>\n', e$degree))
-  cat(sprintf('<div class="edu-school">%s</div>\n', school_html))
-  if (nzchar(e$note)) cat(sprintf('<div class="edu-note">%s</div>\n', e$note))
-  cat('</div>\n')
-}
+render_edu_cards(education$training)
 ```
 
 ```{=html}
@@ -293,6 +266,7 @@ DSCI 521 Computing Platforms &middot; DSCI 511 Programming for Data Science &mid
 ```
 
 ```{=html}
+<!-- ═══════════════════════════ CREDENTIALS ══════════════════════════════ -->
 <section id="credentials" class="port-section-alt">
 <div class="port-container">
 <div class="fade-in">
@@ -307,14 +281,7 @@ DSCI 521 Computing Platforms &middot; DSCI 511 Programming for Data Science &mid
 ```
 
 ```{r certs, results='asis', echo=FALSE}
-for (cert in certifications) {
-  name_html <- if (!is.null(cert$link)) sprintf('<a href="%s" target="_blank" style="text-decoration:none;color:inherit;">%s</a>', cert$link, cert$name) else cert$name
-  cat('<div class="cert-card fade-in">\n')
-  cat(sprintf('<div class="cert-name">%s</div>\n', name_html))
-  cat(sprintf('<div class="cert-issuer">%s</div>\n', cert$issuer))
-  if (!is.null(cert$date) && nzchar(cert$date)) cat(sprintf('<div class="cert-date">%s</div>\n', cert$date))
-  cat('</div>\n')
-}
+render_certs(certifications)
 ```
 
 ```{=html}
@@ -326,7 +293,7 @@ for (cert in certifications) {
 ```
 
 ```{r affil-ph, results='asis', echo=FALSE}
-for (a in affiliations$ph) cat(sprintf('<li>%s</li>\n', affil_link(a)))
+render_affils(affiliations$ph)
 ```
 
 ```{=html}
@@ -336,7 +303,7 @@ for (a in affiliations$ph) cat(sprintf('<li>%s</li>\n', affil_link(a)))
 ```
 
 ```{r affil-ds, results='asis', echo=FALSE}
-for (a in affiliations$ds) cat(sprintf('<li>%s</li>\n', affil_link(a)))
+render_affils(affiliations$ds)
 ```
 
 ```{=html}
@@ -346,11 +313,7 @@ for (a in affiliations$ds) cat(sprintf('<li>%s</li>\n', affil_link(a)))
 ```
 
 ```{r mentorship, results='asis', echo=FALSE}
-for (m in mentorship) {
-  label <- if (!is.null(m$link)) sprintf('<a href="%s" target="_blank">%s</a>', m$link, m$event) else m$event
-  if (!is.null(m$date)) label <- paste0(label, sprintf(' <span style="color:var(--muted);font-size:0.8em;">&middot; %s</span>', m$date))
-  cat(sprintf('<li>%s</li>\n', label))
-}
+render_mentorship(mentorship)
 ```
 
 ```{=html}
@@ -362,60 +325,70 @@ for (m in mentorship) {
 ```
 
 ```{=html}
-<section id="built-with" class="port-section">
-<div class="port-container">
-<div class="fade-in">
-  <div class="section-eyebrow">Open source</div>
-  <h2 class="section-title">Built with</h2>
-  <div class="section-divider"></div>
-  <p style="max-width:560px;">This site is open source, statically rendered, and self-hosted — no databases, no trackers, no ads. Every component used to build it is free and open source.</p>
-</div>
-<div class="built-grid fade-in">
-  <a href="https://quarto.org" target="_blank" class="built-card">
-    <div class="built-icon">Q</div>
-    <div class="built-body"><div class="built-name">Quarto 1.5</div><div class="built-role">Site framework</div><div class="built-desc">Open-source scientific publishing system. Converts .qmd files into a full website — handles rendering, theming, and navigation.</div></div>
-  </a>
-  <a href="https://www.r-project.org" target="_blank" class="built-card">
-    <div class="built-icon">R</div>
-    <div class="built-body"><div class="built-name">R 4.4</div><div class="built-role">Content engine</div><div class="built-desc">All portfolio content — publications, projects, experience — lives in R data structures and is rendered to HTML dynamically at build time.</div></div>
-  </a>
-  <a href="https://rstudio.github.io/renv/" target="_blank" class="built-card">
-    <div class="built-icon">rv</div>
-    <div class="built-body"><div class="built-name">renv 1.1</div><div class="built-role">Package reproducibility</div><div class="built-desc">Locks exact R package versions in renv.lock — ensuring the site renders identically on every machine and every CI build.</div></div>
-  </a>
-  <a href="https://pages.github.com" target="_blank" class="built-card">
-    <div class="built-icon">GH</div>
-    <div class="built-body"><div class="built-name">GitHub Pages</div><div class="built-role">Hosting</div><div class="built-desc">Free static site hosting directly from the GitHub repository. No server costs, no configuration — just push and the site is live.</div></div>
-  </a>
-  <a href="https://github.com/features/actions" target="_blank" class="built-card">
-    <div class="built-icon">CI</div>
-    <div class="built-body"><div class="built-name">GitHub Actions</div><div class="built-role">CI/CD pipeline</div><div class="built-desc">Every git push to main automatically triggers a Quarto render and redeploy. No manual build steps — the site updates itself.</div></div>
-  </a>
-  <a href="https://getbootstrap.com" target="_blank" class="built-card">
-    <div class="built-icon">B</div>
-    <div class="built-body"><div class="built-name">Bootstrap 5</div><div class="built-role">CSS framework</div><div class="built-desc">Responsive grid and utilities via Quarto's built-in Bootstrap integration. Custom SCSS overrides provide the light and dark palettes.</div></div>
-  </a>
-  <a href="https://fonts.google.com" target="_blank" class="built-card">
-    <div class="built-icon">Aa</div>
-    <div class="built-body"><div class="built-name">Google Fonts</div><div class="built-role">Typography</div><div class="built-desc">Lora (serif headings) · Inter (body) · JetBrains Mono (labels &amp; code). Loaded via a single Google Fonts request.</div></div>
-  </a>
-  <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl" target="_blank" class="built-card">
-    <div class="built-icon">JS</div>
-    <div class="built-body"><div class="built-name">Intl API</div><div class="built-role">Timezone detection</div><div class="built-desc">Vanilla JS Intl.DateTimeFormat reads the visitor's local timezone and automatically selects light (06:00–20:00) or dark mode at page load.</div></div>
-  </a>
-  <a href="https://sass-lang.com" target="_blank" class="built-card">
-    <div class="built-icon">S</div>
-    <div class="built-body"><div class="built-name">Sass / SCSS</div><div class="built-role">Theming</div><div class="built-desc">Two SCSS files define the complete light and dark palettes — colors, fonts, and Bootstrap variable overrides — compiled by Quarto at build time.</div></div>
-  </a>
-</div>
-<div class="mit-notice fade-in">
-  <div class="mit-badge">MIT</div>
-  <div class="mit-text">
-    <strong>Open source under the MIT License.</strong>
-    The source code for this site is freely available to use, modify, and redistribute.
-    See the <a href="https://github.com/mahm00d27/mahm00d27.github.io/blob/main/LICENSE" target="_blank">LICENSE</a> file on GitHub.
+<!-- ═══════════════════════════ SITE FOOTER ══════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span>&copy; 2026 Mahmoodur Rahman &middot; MIT License</span>
+    <span class="footer-sep">·</span>
+    <button class="footer-link" onclick="openBuiltWith()">How this site was built ↗</button>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════ BUILT WITH MODAL ═════════════════════════ -->
+<div id="bw-modal" class="bw-overlay" role="dialog" aria-modal="true" aria-label="How this site was built">
+  <div class="bw-dialog">
+    <button class="bw-close" onclick="closeBuiltWith()" aria-label="Close">&times;</button>
+    <div class="section-eyebrow" style="margin-bottom:0.5rem;">Open source</div>
+    <h2 style="margin:0 0 0.5rem;font-size:1.5rem;">Built with</h2>
+    <p style="color:var(--ink-soft);font-size:0.875rem;margin-bottom:1.5rem;max-width:520px;">
+      This site is open source, statically rendered, and self-hosted — no databases, no trackers, no ads.
+      Every component used to build it is free and open source.
+    </p>
+    <div class="built-grid">
+      <a href="https://quarto.org" target="_blank" class="built-card">
+        <div class="built-icon">Q</div>
+        <div class="built-body"><div class="built-name">Quarto 1.5</div><div class="built-role">Site framework</div><div class="built-desc">Open-source scientific publishing system. Converts .qmd files into a full website.</div></div>
+      </a>
+      <a href="https://www.r-project.org" target="_blank" class="built-card">
+        <div class="built-icon">R</div>
+        <div class="built-body"><div class="built-name">R 4.4</div><div class="built-role">Content engine</div><div class="built-desc">All portfolio content lives in R data structures and is rendered to HTML at build time.</div></div>
+      </a>
+      <a href="https://klmr.me/box/" target="_blank" class="built-card">
+        <div class="built-icon">bx</div>
+        <div class="built-body"><div class="built-name">box</div><div class="built-role">Module system</div><div class="built-desc">Python-style explicit imports for R. HTML renderers live in <code>modules/</code> and are loaded with <code>box::use()</code>.</div></div>
+      </a>
+      <a href="https://rstudio.github.io/renv/" target="_blank" class="built-card">
+        <div class="built-icon">rv</div>
+        <div class="built-body"><div class="built-name">renv 1.1</div><div class="built-role">Reproducibility</div><div class="built-desc">Locks exact R package versions — identical builds on every machine and CI run.</div></div>
+      </a>
+      <a href="https://pages.github.com" target="_blank" class="built-card">
+        <div class="built-icon">GH</div>
+        <div class="built-body"><div class="built-name">GitHub Pages</div><div class="built-role">Hosting</div><div class="built-desc">Free static hosting from the GitHub repo. No server costs, no configuration.</div></div>
+      </a>
+      <a href="https://github.com/features/actions" target="_blank" class="built-card">
+        <div class="built-icon">CI</div>
+        <div class="built-body"><div class="built-name">GitHub Actions</div><div class="built-role">CI/CD pipeline</div><div class="built-desc">Every push to main triggers an automatic Quarto render and deploy.</div></div>
+      </a>
+      <a href="https://getbootstrap.com" target="_blank" class="built-card">
+        <div class="built-icon">B</div>
+        <div class="built-body"><div class="built-name">Bootstrap 5</div><div class="built-role">CSS framework</div><div class="built-desc">Responsive grid via Quarto's built-in Bootstrap. Custom SCSS for light &amp; dark palettes.</div></div>
+      </a>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl" target="_blank" class="built-card">
+        <div class="built-icon">JS</div>
+        <div class="built-body"><div class="built-name">Intl API</div><div class="built-role">Timezone detection</div><div class="built-desc">Vanilla JS reads visitor timezone and sets light (06:00–20:00) or dark mode automatically.</div></div>
+      </a>
+      <a href="https://sass-lang.com" target="_blank" class="built-card">
+        <div class="built-icon">S</div>
+        <div class="built-body"><div class="built-name">Sass / SCSS</div><div class="built-role">Theming</div><div class="built-desc">Two SCSS files define complete light and dark palettes compiled by Quarto at build time.</div></div>
+      </a>
+    </div>
+    <div class="mit-notice" style="margin-top:1.5rem;">
+      <div class="mit-badge">MIT</div>
+      <div class="mit-text">
+        <strong>Open source under the MIT License.</strong>
+        See the <a href="https://github.com/mahm00d27/mahm00d27.github.io/blob/main/LICENSE" target="_blank">LICENSE</a> file on GitHub.
+      </div>
+    </div>
   </div>
 </div>
-</div>
-</section>
 ```

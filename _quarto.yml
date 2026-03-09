@@ -34,8 +34,6 @@ website:
         href: "index.html#education"
       - text: "Credentials"
         href: "index.html#credentials"
-      - text: "Built with"
-        href: "index.html#built-with"
     right:
       - icon: linkedin
         href: "https://www.linkedin.com/in/drmrahman/"
