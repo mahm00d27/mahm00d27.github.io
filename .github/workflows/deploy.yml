@@ -5,8 +5,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Only deploy after tests pass
-# Tests run in tests.yml on every push — this workflow checks that result.
 permissions:
   contents: read
   pages: write
@@ -21,6 +19,10 @@ jobs:
   # ── BUILD ──────────────────────────────────────────────────────────────────
   build:
     runs-on: ubuntu-latest
+    env:
+      # Cache path for renv (good speed-up across runs)
+      RENV_PATHS_ROOT: ~/.cache/R/renv
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,35 +30,62 @@ jobs:
       - name: Setup R 4.4
         uses: r-lib/actions/setup-r@v2
         with:
-          r-version: "4.4.0"
+          r-version: "4.4.1"           # match lockfile R version to avoid edge cases
           use-public-rspm: true
 
       - name: Install system dependencies
-        run: sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-
-      - name: Install renv
         run: |
-          options(repos = c(CRAN = "https://cloud.r-project.org"))
-          install.packages("renv")
-        shell: Rscript {0}
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
+      # Cache the renv package store
+      - name: Cache renv packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
+
+      # setup-renv installs renv (if needed), activates the project, and runs renv::restore()
+      # per the renv CI guidance.
       - name: Restore renv packages
         uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 2
 
-      - name: Run tests before build
+      # Optional but useful once to verify activation
+      - name: Diagnostics (after restore)
+        shell: Rscript {0}
         run: |
+          if (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
+          cat(">>> .libPaths():\n"); print(.libPaths())
+          cat("\n>>> testthat available? "); cat(requireNamespace("testthat", quietly = TRUE), "\n")
+          cat("\n>>> renv::status():\n"); renv::status()
+
+      - name: Run tests before build
+        shell: Rscript {0}
+        run: |
+          # *** CRITICAL: activate renv in THIS R session ***
+          if (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
+
           options(
             repos    = c(CRAN = "https://cloud.r-project.org"),
             box.path = getwd()
           )
+
+          # Fallback in case restore/activation didn’t surface testthat
+          if (!requireNamespace("testthat", quietly = TRUE)) {
+            message("testthat not found after renv activation; installing fallback.")
+            install.packages("testthat")
+          }
+
           results <- testthat::test_dir(
             "tests/testthat",
             reporter = testthat::ProgressReporter$new(max_failures = Inf)
           )
-          if (any(as.data.frame(results)$failed > 0)) quit(status = 1)
-        shell: Rscript {0}
+          df <- as.data.frame(results)
+          if (nrow(df) && any(df$failed > 0)) quit(status = 1)
 
       - name: Setup Quarto 1.5
         uses: quarto-dev/quarto-actions/setup@v2
@@ -65,6 +94,7 @@ jobs:
 
       - name: Render site
         run: |
+          Rscript -e "if (file.exists('renv/activate.R')) source('renv/activate.R', local = TRUE)"
           Rscript -e "options(box.path = getwd())"
           quarto render
 
