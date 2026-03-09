@@ -201,9 +201,11 @@ test_that("render_publications renders DOI link when doi provided", {
 
 test_that("render_publications omits DOI when doi is NULL", {
   pub <- minimal_pub
-  pub[[1]]$doi <- NULL
+  pub[[1]]$doi  <- NULL
+  pub[[1]]$link <- NULL   # remove link too — it also contains doi.org
   out <- render_publications(pub)
   expect_false(grepl("doi.org", out))
+  expect_false(grepl("pub-doi", out))
 })
 
 test_that("render_publications omits DOI when doi is empty string", {
