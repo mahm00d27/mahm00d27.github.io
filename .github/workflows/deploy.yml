@@ -1,44 +1,34 @@
 name: Build & Deploy
-
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: read
   pages: write
   id-token: write
   actions: read
-
 concurrency:
   group: pages
   cancel-in-progress: false
-
 jobs:
   # ── BUILD ──────────────────────────────────────────────────────────────────
   build:
     runs-on: ubuntu-latest
     env:
-      # Cache path for renv (good speed-up across runs)
       RENV_PATHS_ROOT: ~/.cache/R/renv
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup R 4.4
         uses: r-lib/actions/setup-r@v2
         with:
-          r-version: "4.4.1"           # match lockfile R version to avoid edge cases
+          r-version: "4.4.1"
           use-public-rspm: true
-
       - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-
-      # Cache the renv package store
       - name: Cache renv packages
         uses: actions/cache@v4
         with:
@@ -46,69 +36,54 @@ jobs:
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
           restore-keys: |
             ${{ runner.os }}-renv-
-
-      # setup-renv installs renv (if needed), activates the project, and runs renv::restore()
-      # per the renv CI guidance.
-      - name: Restore renv packages
-        uses: r-lib/actions/setup-renv@v2
-        with:
-          cache-version: 2
-
-      # Optional but useful once to verify activation
-      - name: Diagnostics (after restore)
+      - name: Install and restore renv
+        shell: Rscript {0}
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore(clean = TRUE, prompt = FALSE)
+      - name: Diagnostics
         shell: Rscript {0}
         run: |
           if (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
           cat(">>> .libPaths():\n"); print(.libPaths())
           cat("\n>>> testthat available? "); cat(requireNamespace("testthat", quietly = TRUE), "\n")
           cat("\n>>> renv::status():\n"); renv::status()
-
       - name: Run tests before build
         shell: Rscript {0}
-
         run: |
-          # Activate renv so this R session uses the project library
           if (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
-
           options(
             repos    = c(CRAN = "https://cloud.r-project.org"),
             box.path = getwd()
           )
-
-          # Belt & suspenders: install any missing test deps
           pkgs <- c("testthat", "here", "box")
           miss <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
           if (length(miss)) {
             message("Installing missing packages: ", paste(miss, collapse = ", "))
             install.packages(miss)
           }
-
           results <- testthat::test_dir(
             "tests/testthat",
             reporter = testthat::ProgressReporter$new(max_failures = Inf)
           )
           df <- as.data.frame(results)
           if (nrow(df) && any(df$failed > 0)) quit(status = 1)
-
       - name: Setup Quarto 1.5
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: "1.5.57"
-
       - name: Render site
         run: |
           Rscript -e "if (file.exists('renv/activate.R')) source('renv/activate.R', local = TRUE)"
           Rscript -e "options(box.path = getwd())"
           quarto render
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site
-
   # ── DEPLOY ─────────────────────────────────────────────────────────────────
   deploy:
     needs: build

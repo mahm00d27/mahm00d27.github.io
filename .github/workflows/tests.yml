@@ -1,34 +1,25 @@
 name: Tests
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
-
 jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      # Cache path for renv (recommended)
       RENV_PATHS_ROOT: ~/.cache/R/renv
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
-          # Match your project’s R series; exact patch not required
           r-version: "4.4.1"
           use-public-rspm: true
-
       - name: Install system dependencies
         run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
-
-      # Cache the renv package store
       - name: Cache renv packages
         uses: actions/cache@v4
         with:
@@ -36,15 +27,12 @@ jobs:
           key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
           restore-keys: |
             ${{ runner.os }}-renv-
-
-      # This action installs renv, activates the project, and runs renv::restore()
-      # (consistent with the renv CI vignette)
-      - name: Restore packages with renv
-        uses: r-lib/actions/setup-renv@v2
-        with:
-          cache-version: 2
-
-      # Quick diagnostics to confirm testthat is present and which library is active
+      - name: Install and restore renv
+        shell: Rscript {0}
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org"))
+          if (!requireNamespace("renv", quietly = TRUE)) install.packages("renv")
+          renv::restore(clean = TRUE, prompt = FALSE)
       - name: Diagnostics
         shell: Rscript {0}
         run: |
@@ -54,40 +42,27 @@ jobs:
           print(sessionInfo())
           cat("\n>>> testthat installed?\n")
           cat(requireNamespace("testthat", quietly = TRUE), "\n")
-
-      # Run tests with a safe fallback install in case restore was blocked by repo issues
-      
       - name: Run tests
         shell: Rscript {0}
         run: |
-          # Activate renv so THIS R session uses the project library
-          if (file.exists("renv/activate.R")) {
-            source("renv/activate.R", local = TRUE)
-          }
-
+          if (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
           options(
             repos    = c(CRAN = "https://cloud.r-project.org"),
             box.path = getwd()
           )
-
-          # Belt & suspenders: ensure test deps are available even if restore missed them
           pkgs <- c("testthat", "box", "here")
           miss <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
           if (length(miss)) {
             message("Installing missing packages: ", paste(miss, collapse = ", "))
             install.packages(miss)
           }
-
           results <- testthat::test_dir(
             "tests/testthat",
             reporter = testthat::ProgressReporter$new(max_failures = Inf)
           )
-
           df <- as.data.frame(results)
           if (nrow(df) && any(df$failed > 0)) {
             cat("\n--- FAILED TESTS ---\n")
             print(results)
             quit(status = 1)
           }
-
-          

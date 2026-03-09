@@ -367,7 +367,11 @@ cat(render_mentorship(mentorship))
       </a>
       <a href="https://github.com/features/actions" target="_blank" class="built-card">
         <div class="built-icon">CI</div>
-        <div class="built-body"><div class="built-name">GitHub Actions</div><div class="built-role">CI/CD pipeline</div><div class="built-desc">Every push to main triggers an automatic Quarto render and deploy.</div></div>
+        <div class="built-body"><div class="built-name">GitHub Actions</div><div class="built-role">CI/CD pipeline</div><div class="built-desc">Every push runs unit &amp; data tests first — site only renders and deploys if all tests pass.</div></div>
+      </a>
+      <a href="https://testthat.r-lib.org" target="_blank" class="built-card">
+        <div class="built-icon">tt</div>
+        <div class="built-body"><div class="built-name">testthat 3</div><div class="built-role">Testing</div><div class="built-desc">115+ unit and data integrity tests cover every HTML renderer, helper function, and content field in <code>data/portfolio_data.R</code>.</div></div>
       </a>
       <a href="https://getbootstrap.com" target="_blank" class="built-card">
         <div class="built-icon">B</div>
