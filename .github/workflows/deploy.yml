@@ -65,8 +65,9 @@ jobs:
 
       - name: Run tests before build
         shell: Rscript {0}
+
         run: |
-          # *** CRITICAL: activate renv in THIS R session ***
+          # Activate renv so this R session uses the project library
           if (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
 
           options(
@@ -74,10 +75,12 @@ jobs:
             box.path = getwd()
           )
 
-          # Fallback in case restore/activation didn’t surface testthat
-          if (!requireNamespace("testthat", quietly = TRUE)) {
-            message("testthat not found after renv activation; installing fallback.")
-            install.packages("testthat")
+          # Belt & suspenders: install any missing test deps
+          pkgs <- c("testthat", "here", "box")
+          miss <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
+          if (length(miss)) {
+            message("Installing missing packages: ", paste(miss, collapse = ", "))
+            install.packages(miss)
           }
 
           results <- testthat::test_dir(
