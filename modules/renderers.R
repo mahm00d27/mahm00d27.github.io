@@ -14,8 +14,8 @@ render_experience <- function(experience) {
       sprintf('<a href="%s" target="_blank">%s</a>', item$link, item$org)
     } else item$org
     bullets <- paste0("<ul>",
-      paste0("<li>", item$bullets, "</li>", collapse = ""),
-      "</ul>")
+                      paste0("<li>", item$bullets, "</li>", collapse = ""),
+                      "</ul>")
     paste0(
       sprintf('<div class="%s">\n', cls),
       sprintf('<div class="tl-period">%s &middot; %s</div>\n', item$period, item$location),
@@ -34,8 +34,8 @@ render_projects <- function(projects) {
   parts <- lapply(projects, function(p) {
     stopifnot(all(c("period", "org", "title", "desc", "tags") %in% names(p)))
     tags_block <- paste0('<div class="tags">',
-      paste0('<span class="tag">', p$tags, '</span>', collapse = ""),
-      '</div>')
+                         paste0('<span class="tag">', p$tags, '</span>', collapse = ""),
+                         '</div>')
     link_block <- if (!is.null(p$link)) {
       sprintf('\n<a class="p-card-link" href="%s" target="_blank">View project \u2192</a>\n', p$link)
     } else ""
@@ -54,114 +54,29 @@ render_projects <- function(projects) {
 
 #' Build publication list items HTML string
 #' @export
-
 render_publications <- function(publications) {
-  # ---- validation ---------------------------------------------------
-  if (is.null(publications) || !is.list(publications) || length(publications) == 0) {
-    stop("`publications` must be a non-empty list.")
-  }
-  
-  required <- c("year", "title", "authors", "journal", "detail")
-  validate_pub <- function(pub, idx) {
-    for (f in required) {
-      if (is.null(pub[[f]])) {
-        stop(sprintf("Publication [[%d]] is missing required field `%s`.", idx, f))
-      }
-    }
-    invisible(TRUE)
-  }
-  
-  # ---- helpers ------------------------------------------------------
-  is_nonempty <- function(x) !is.null(x) && is.character(x) && nzchar(x)
-  has_usable_doi <- function(x) is_nonempty(x)              # add ^10\\.? check if you want
-  is_doi_url     <- function(x) is_nonempty(x) && grepl("doi\\.org", x, ignore.case = TRUE)
-  
-  # Escape for text nodes
-  esc <- function(x) {
-    x <- gsub("&", "&amp;", x, fixed = TRUE)
-    x <- gsub("<", "&lt;",  x, fixed = TRUE)
-    x <- gsub(">", "&gt;",  x, fixed = TRUE)
-    x
-  }
-  # Escape for attribute values (URLs)
-  esc_attr <- function(x) {
-    x <- esc(x)
-    x <- gsub("\"", "&quot;", x, fixed = TRUE)
-    x
-  }
-  
-  # ---- build each <li> ----------------------------------------------
-  items <- vector("list", length(publications))
-  
-  for (i in seq_along(publications)) {
-    pub <- publications[[i]]
-    validate_pub(pub, i)
-    
-    include_doi <- has_usable_doi(pub$doi)
-    link_is_doi <- is_doi_url(pub$link)
-    
-    # Title:
-    # - link ONLY when link is present
-    # - and not a DOI url in a case where doi is absent
-    title_html <- if (is_nonempty(pub$link) && !(link_is_doi && !include_doi)) {
-      sprintf('<a href="%s">%s</a>', esc_attr(pub$link), esc(pub$title))
-    } else {
-      esc(pub$title)
-    }
-    
-    # DOI block (plain text; NEVER add an <a>)
-    doi_html <- if (include_doi) {
-      sprintf('<span class="pub-doi">https://doi.org/%s</span>', esc(pub$doi))
-    } else {
-      ""
-    }
-    
-    # detail + optional DOI (space before DOI only when present)
-    detail_plus_doi <- if (nzchar(doi_html)) {
-      paste0(esc(pub$detail), " ", doi_html)
-    } else {
-      esc(pub$detail)
-    }
-    
-    # Build the <li>
-    li <- sprintf(
-      paste0(
-        '<li class="pub-item">',
-        '<span class="pub-year">%s</span> ',
-        '%s. %s. %s. %s',
-        '</li>'
-      ),
-      esc(as.character(pub$year)),
-      title_html,
-      esc(pub$authors),
-      esc(pub$journal),
-      detail_plus_doi
+  stopifnot(is.list(publications))
+  parts <- lapply(publications, function(pub) {
+    stopifnot(all(c("year", "title", "authors", "journal", "detail") %in% names(pub)))
+    title_html <- if (!is.null(pub$link)) {
+      sprintf('<a href="%s" target="_blank">%s</a>', pub$link, pub$title)
+    } else pub$title
+    doi_html <- if (!is.null(pub$doi) && nzchar(pub$doi)) {
+      sprintf('<a class="pub-doi" href="https://doi.org/%s" target="_blank">doi:%s</a>',
+              pub$doi, pub$doi)
+    } else ""
+    paste0(
+      '<li class="pub-item fade-in">\n',
+      sprintf('<div class="pub-year">%s</div>\n', pub$year),
+      '<div class="pub-content">\n',
+      sprintf('<div class="pub-title">%s</div>\n', title_html),
+      sprintf('<div class="pub-authors">%s</div>\n', pub$authors),
+      sprintf('<div class="pub-journal"><em>%s</em> &middot; %s</div>\n', pub$journal, pub$detail),
+      doi_html, '\n</div></li>\n'
     )
-    
-    # -----------------------------------------------------------------
-    # FINAL, PER-ITEM SANITIZATION FOR THE TWO TESTED SCENARIOS
-    # 1) If link is NULL/empty, remove ANY anchors in this item (belt & suspenders)
-    if (!is_nonempty(pub$link)) {
-      li <- gsub("</?a\\b[^>]*>", "", li, perl = TRUE)  # strips both <a ...> and </a>
-    }
-    
-    # 2) If doi is NULL/empty, remove ANY occurrence of "doi.org..."
-    if (!include_doi) {
-      # remove raw doi.org URLs
-      li <- gsub("https?://doi\\.org/[^\\s<\"]+", "", li, ignore.case = TRUE)
-      # unwrap anchors whose href contains doi.org (if any still present)
-      li <- gsub('<a\\b[^>]*href="[^"]*doi\\.org[^"]*"[^>]*>', "", li,
-                 ignore.case = TRUE, perl = TRUE)
-      li <- gsub("</a>", "", li, fixed = TRUE)
-    }
-    # -----------------------------------------------------------------
-    
-    items[[i]] <- li
-  }
-  
-  paste(items, collapse = "\n")
+  })
+  paste(parts, collapse = "\n")
 }
-
 
 #' Build education cards HTML string
 #' @export
@@ -199,7 +114,7 @@ render_certs <- function(certifications) {
     stopifnot(all(c("name", "issuer") %in% names(cert)))
     name_html <- if (!is.null(cert$link)) {
       sprintf('<a href="%s" target="_blank" style="text-decoration:none;color:inherit;">%s</a>',
-        cert$link, cert$name)
+              cert$link, cert$name)
     } else cert$name
     date_line <- if (!is.null(cert$date) && nzchar(cert$date)) {
       sprintf('<div class="cert-date">%s</div>\n', cert$date)
