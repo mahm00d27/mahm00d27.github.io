@@ -47,6 +47,7 @@ jobs:
         run: |
           if (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
           cat(">>> .libPaths():\n"); print(.libPaths())
+          cat("\n>>> rmarkdown available? "); cat(requireNamespace("rmarkdown", quietly = TRUE), "\n")
           cat("\n>>> testthat available? "); cat(requireNamespace("testthat", quietly = TRUE), "\n")
           cat("\n>>> renv::status():\n"); renv::status()
       - name: Run tests before build
@@ -74,10 +75,11 @@ jobs:
         with:
           version: "1.5.57"
       - name: Render site
-        run: |
-          Rscript -e "if (file.exists('renv/activate.R')) source('renv/activate.R', local = TRUE)"
-          Rscript -e "options(box.path = getwd())"
-          quarto render
+        env:
+          RENV_PATHS_ROOT: ~/.cache/R/renv
+          # Tell R exactly which library to use — bypasses .Rprofile timing issues
+          R_LIBS_USER: ~/.cache/R/renv/library/mahm00d27.github.io-c7016802/linux-ubuntu-noble/R-4.4/x86_64-pc-linux-gnu
+        run: quarto render
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
