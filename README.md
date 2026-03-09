@@ -22,20 +22,6 @@
 | Typography | Google Fonts | Lora · Inter · JetBrains Mono |
 | Theme switching | Intl API | Timezone-based auto dark/light |
 
-## Local dev
-
-```bash
-git clone https://github.com/mahm00d27/mahm00d27.github.io.git
-cd mahm00d27.github.io
-Rscript -e "install.packages('renv'); renv::restore()"
-quarto preview
-```
-
-## Deploy
-
-```bash
-git push  # GitHub Actions renders and deploys automatically
-```
 
 ## License
 
