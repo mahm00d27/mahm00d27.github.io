@@ -10,44 +10,68 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      # Cache path for renv (recommended)
+      RENV_PATHS_ROOT: ~/.cache/R/renv
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup R 4.4
+      - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
-          r-version: "4.4.0"
+          # Match your project’s R series; exact patch not required
+          r-version: "4.4.1"
           use-public-rspm: true
 
       - name: Install system dependencies
-        run: sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
-      - name: Install renv
-        run: |
-          options(repos = c(CRAN = "https://cloud.r-project.org"))
-          install.packages("renv")
-        shell: Rscript {0}
+      # Cache the renv package store
+      - name: Cache renv packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-
 
-      - name: Restore renv packages
+      # This action installs renv, activates the project, and runs renv::restore()
+      # (consistent with the renv CI vignette)
+      - name: Restore packages with renv
         uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 2
 
-      - name: Run tests
+      # Quick diagnostics to confirm testthat is present and which library is active
+      - name: Diagnostics
+        shell: Rscript {0}
         run: |
-          options(
-            repos     = c(CRAN = "https://cloud.r-project.org"),
-            box.path  = getwd()
-          )
+          cat(">>> renv::status():\n")
+          renv::status()
+          cat("\n>>> sessionInfo():\n")
+          print(sessionInfo())
+          cat("\n>>> testthat installed?\n")
+          cat(requireNamespace("testthat", quietly = TRUE), "\n")
+
+      # Run tests with a safe fallback install in case restore was blocked by repo issues
+      - name: Run tests
+        shell: Rscript {0}
+        run: |
+          options(repos = c(CRAN = "https://cloud.r-project.org"),
+                  box.path = getwd())
+          if (!requireNamespace("testthat", quietly = TRUE)) {
+            message("testthat not found after restore; installing as fallback.")
+            install.packages("testthat")
+          }
           results <- testthat::test_dir(
             "tests/testthat",
             reporter = testthat::ProgressReporter$new(max_failures = Inf)
           )
-          if (any(as.data.frame(results)$failed > 0)) {
+          df <- as.data.frame(results)
+          if (nrow(df) && any(df$failed > 0)) {
             cat("\n--- FAILED TESTS ---\n")
             print(results)
             quit(status = 1)
           }
-        shell: Rscript {0}
