@@ -20,7 +20,7 @@ Physician · Epidemiologist · Data Scientist · Business Analyst at Stroke Serv
 
 Tests run on every push and pull request — the site only renders if all tests pass.
 
-### Tests
+### What is tested (584 tests)
 
 **`tests/testthat/test-html-builders.R`** — unit tests for `modules/html_builders.R`
 - `tags_html()`: correct span wrapping, div container, multiple tags
@@ -32,7 +32,7 @@ Tests run on every push and pull request — the site only renders if all tests 
 - Every renderer: returns a single string, renders required content fields
 - `render_experience()`: active/inactive classes, bullet items, optional org links, multi-item
 - `render_projects()`: tags, optional links, description content
-- `render_publications()`: DOI links, optional link on title, empty/NULL DOI handling
+- `render_publications()`: DOI links, optional link on title, DOI NULL/empty omission (both `doi` and `link` fields nulled to isolate DOI-specific markup), `pub-content` wrapper present
 - `render_edu_cards()`: optional school link, optional location, empty note omission
 - `render_certs()`: optional link and date, date omission when NULL
 - `render_affils()`: linked vs plain text, em-dash
@@ -90,6 +90,26 @@ mahm00d27.github.io/
 └── .github/workflows/
     ├── tests.yml            # Runs on every push & PR
     └── deploy.yml           # Runs tests → renders → deploys
+```
+
+## Local dev
+
+```r
+install.packages("renv")
+renv::restore()
+
+# Run tests
+options(box.path = getwd())
+testthat::test_dir("tests/testthat")
+
+# Preview site
+quarto preview
+```
+
+## Deploy
+
+```bash
+git push   # tests run → if passing, site renders and deploys automatically
 ```
 
 ## License
