@@ -1,16 +1,17 @@
-name: Render & Deploy Portfolio
+name: Build & Deploy
 
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
+# Only deploy after tests pass
+# Tests run in tests.yml on every push — this workflow checks that result.
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 concurrency:
   group: pages
@@ -30,8 +31,6 @@ jobs:
           r-version: "4.4.0"
           use-public-rspm: true
 
-      # renv restores exact package versions from renv.lock
-      # Cache key includes the lockfile hash — lockfile change = fresh install
       - name: Install system dependencies
         run: sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
 
@@ -46,15 +45,28 @@ jobs:
         with:
           cache-version: 2
 
+      - name: Run tests before build
+        run: |
+          options(
+            repos    = c(CRAN = "https://cloud.r-project.org"),
+            box.path = getwd()
+          )
+          results <- testthat::test_dir(
+            "tests/testthat",
+            reporter = testthat::ProgressReporter$new(max_failures = Inf)
+          )
+          if (any(as.data.frame(results)$failed > 0)) quit(status = 1)
+        shell: Rscript {0}
+
       - name: Setup Quarto 1.5
         uses: quarto-dev/quarto-actions/setup@v2
         with:
           version: "1.5.57"
 
       - name: Render site
-        uses: quarto-dev/quarto-actions/render@v2
-        with:
-          to: html
+        run: |
+          Rscript -e "options(box.path = getwd())"
+          quarto render
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -68,7 +80,6 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
