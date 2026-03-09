@@ -56,20 +56,26 @@ jobs:
           cat(requireNamespace("testthat", quietly = TRUE), "\n")
 
       # Run tests with a safe fallback install in case restore was blocked by repo issues
+      
       - name: Run tests
         shell: Rscript {0}
         run: |
-          If (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
-        
-          
+          # Activate renv so THIS R session uses the project library
+          if (file.exists("renv/activate.R")) {
+            source("renv/activate.R", local = TRUE)
+          }
+
           options(
-            repos     = c(CRAN = "https://cloud.r-project.org"),
-            box.path  = getwd()
+            repos    = c(CRAN = "https://cloud.r-project.org"),
+            box.path = getwd()
           )
 
-          if (!requireNamespace("testthat", quietly = TRUE)) {
-            message("testthat not found after renv activation — installing fallback")
-            install.packages("testthat")
+          # Belt & suspenders: ensure test deps are available even if restore missed them
+          pkgs <- c("testthat", "box", "here")
+          miss <- pkgs[!vapply(pkgs, requireNamespace, logical(1), quietly = TRUE)]
+          if (length(miss)) {
+            message("Installing missing packages: ", paste(miss, collapse = ", "))
+            install.packages(miss)
           }
 
           results <- testthat::test_dir(
@@ -78,8 +84,10 @@ jobs:
           )
 
           df <- as.data.frame(results)
-          if (any(df$failed > 0)) {
+          if (nrow(df) && any(df$failed > 0)) {
             cat("\n--- FAILED TESTS ---\n")
             print(results)
             quit(status = 1)
           }
+
+          
