@@ -59,18 +59,26 @@ jobs:
       - name: Run tests
         shell: Rscript {0}
         run: |
-          options(repos = c(CRAN = "https://cloud.r-project.org"),
-                  box.path = getwd())
+          If (file.exists("renv/activate.R")) source("renv/activate.R", local = TRUE)
+        
+          
+          options(
+            repos     = c(CRAN = "https://cloud.r-project.org"),
+            box.path  = getwd()
+          )
+
           if (!requireNamespace("testthat", quietly = TRUE)) {
-            message("testthat not found after restore; installing as fallback.")
+            message("testthat not found after renv activation — installing fallback")
             install.packages("testthat")
           }
+
           results <- testthat::test_dir(
             "tests/testthat",
             reporter = testthat::ProgressReporter$new(max_failures = Inf)
           )
+
           df <- as.data.frame(results)
-          if (nrow(df) && any(df$failed > 0)) {
+          if (any(df$failed > 0)) {
             cat("\n--- FAILED TESTS ---\n")
             print(results)
             quit(status = 1)
