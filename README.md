@@ -107,7 +107,7 @@ testthat::test_dir("tests/testthat")
 quarto preview
 ```
 
-## Deploy
+## Deployment
 
 ```bash
 git push   # tests run → if passing, site renders and deploys automatically
