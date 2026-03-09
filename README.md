@@ -20,7 +20,7 @@ Physician · Epidemiologist · Data Scientist · Business Analyst at Stroke Serv
 
 Tests run on every push and pull request — the site only renders if all tests pass.
 
-### What is tested
+### Tests
 
 **`tests/testthat/test-html-builders.R`** — unit tests for `modules/html_builders.R`
 - `tags_html()`: correct span wrapping, div container, multiple tags
@@ -90,27 +90,6 @@ mahm00d27.github.io/
 └── .github/workflows/
     ├── tests.yml            # Runs on every push & PR
     └── deploy.yml           # Runs tests → renders → deploys
-```
-
-## Local dev
-
-```r
-# Install renv then restore all packages
-install.packages("renv")
-renv::restore()
-
-# Run tests
-options(box.path = getwd())
-testthat::test_dir("tests/testthat")
-
-# Preview site
-quarto preview
-```
-
-## Deployment
-
-```bash
-git push   # tests run → if passing, site renders and deploys automatically
 ```
 
 ## License
