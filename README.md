@@ -20,7 +20,7 @@ Physician · Epidemiologist · Data Scientist · Business Analyst at Stroke Serv
 
 Tests run on every push and pull request — the site only renders if all tests pass.
 
-### What is tested (584 tests)
+### Tests (584 tests)
 
 **`tests/testthat/test-html-builders.R`** — unit tests for `modules/html_builders.R`
 - `tags_html()`: correct span wrapping, div container, multiple tags
@@ -138,11 +138,6 @@ git push origin update-publications
 - `fix-*` — bug fixes (layout, rendering, CI)
 - `feat-*` — new features or sections
 
-## License
-
-MIT © 2026 Mahmoodur Rahman
-
----
 
 ## Change workflow
 
@@ -180,3 +175,10 @@ flowchart TD
     style Q fill:#dda15e,color:#000,stroke:none
     style E fill:#dda15e,color:#000,stroke:none
 ```
+
+
+## License
+
+MIT © 2026 Mahmoodur Rahman
+
+---
