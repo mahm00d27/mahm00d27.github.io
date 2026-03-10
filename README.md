@@ -106,12 +106,77 @@ testthat::test_dir("tests/testthat")
 quarto preview
 ```
 
-## Deploy
+## Contributing
+
+This is a personal portfolio — only the owner (@mahm00d27) may make changes. The `main` branch is protected; all changes must go through a pull request and pass CI before merging.
+
+**Workflow:**
 
 ```bash
-git push   # tests run → if passing, site renders and deploys automatically
+# 1. Create a branch for your change
+git checkout -b update-publications
+
+# 2. Make and preview changes locally
+quarto preview
+
+# 3. Run tests
+# In RStudio console:
+# options(box.path = getwd())
+# testthat::test_dir("tests/testthat")
+
+# 4. Commit and push
+git add .
+git commit -m "feat: update publications"
+git push origin update-publications
+
+# 5. Open a PR on GitHub → review → approve → merge
+#    CI runs all 584 tests automatically — site only deploys if all pass
 ```
+
+**Branch naming:**
+- `update-*` — content changes (publications, projects, experience)
+- `fix-*` — bug fixes (layout, rendering, CI)
+- `feat-*` — new features or sections
 
 ## License
 
 MIT © 2026 Mahmoodur Rahman
+
+---
+
+## Change workflow
+
+```mermaid
+flowchart TD
+    A([🖊️ Start: make a change]) --> B[git checkout -b update-something]
+    B --> C[Edit files\ndata/portfolio_data.R\nmodules/ · assets/ · index.qmd]
+    C --> D[quarto preview\nReview site locally]
+    D --> E{Looks good?}
+    E -- No --> C
+    E -- Yes --> F[Run tests locally\ntestthat::test_dir]
+    F --> G{All 584 tests pass?}
+    G -- No --> H[Fix failing tests\nor update test fixtures]
+    H --> F
+    G -- Yes --> I[git add · git commit · git push origin branch]
+    I --> J[Open Pull Request on GitHub]
+    J --> K[🤖 CI: tests.yml\nRuns all 584 tests]
+    K --> L{CI tests pass?}
+    L -- No --> M[Fix issues on branch\ngit push to update PR]
+    M --> K
+    L -- Yes --> N[Review & approve PR\nas @mahm00d27]
+    N --> O[Merge PR into main]
+    O --> P[🤖 CI: deploy.yml\nRuns tests → renders site]
+    P --> Q{Deploy tests pass?}
+    Q -- No --> R[🚫 Deploy blocked\nSite unchanged]
+    Q -- Yes --> S([✅ Site live at\nmahm00d27.github.io])
+
+    style A fill:#2d6a4f,color:#fff,stroke:none
+    style S fill:#2d6a4f,color:#fff,stroke:none
+    style R fill:#9b2226,color:#fff,stroke:none
+    style K fill:#6c584c,color:#fff,stroke:none
+    style P fill:#6c584c,color:#fff,stroke:none
+    style G fill:#dda15e,color:#000,stroke:none
+    style L fill:#dda15e,color:#000,stroke:none
+    style Q fill:#dda15e,color:#000,stroke:none
+    style E fill:#dda15e,color:#000,stroke:none
+```
