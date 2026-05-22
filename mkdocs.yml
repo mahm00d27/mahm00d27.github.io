@@ -1,5 +1,11 @@
 site_name: Mahmoodur Rahman
+
 theme:
   name: material
+
 nav:
   - Home: index.md
+  - About: about.md
+  - Experience: experience.md
+  - Projects: projects.md
+  - Publications: publications.md
