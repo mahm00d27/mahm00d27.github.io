@@ -1,0 +1,5 @@
+site_name: Mahmoodur Rahman
+theme:
+  name: material
+nav:
+  - Home: index.md
