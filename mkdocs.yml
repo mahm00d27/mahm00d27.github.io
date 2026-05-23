@@ -3,15 +3,24 @@ site_url: https://mahm00d27.github.io
 
 theme:
   name: material
+
   features:
     - navigation.tabs
+    - navigation.instant
     - navigation.top
     - navigation.sections
-    - navigation.expand
+    - content.code.copy
+    - content.action.edit
 
   palette:
-    - scheme: default
-      primary: blue
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: teal
+
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
       accent: teal
 
 nav:
