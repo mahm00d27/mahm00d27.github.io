@@ -1,38 +1,97 @@
-/* Page fade-in */
-.md-content {
-  animation: fadeIn 0.6s ease-in-out;
+/* Container */
+.timeline {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  margin-top: 50px;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* horizontal line */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 10%;
+  width: 80%;
+  height: 2px;
+  background: #888;
 }
 
-/* Smooth hover effects */
-.md-typeset h1, .md-typeset h2 {
-  transition: all 0.25s ease;
+/* item */
+.timeline-item {
+  position: relative;
+  text-align: center;
+  cursor: pointer;
 }
 
-.md-typeset h1:hover,
-.md-typeset h2:hover {
-  transform: scale(1.03);
+/* dot */
+.dot {
+  width: 16px;
+  height: 16px;
+  background: #3f51b5;
+  border-radius: 50%;
+  margin: 0 auto;
+  transition: all 0.3s ease;
 }
 
-/* Interactive links */
-.md-typeset a {
-  transition: all 0.25s ease;  
-  display: inline-block;
-  padding: 8px 14px;
+/* hover effect */
+.timeline-item:hover .dot {
+  transform: scale(1.5);
+  background: #26c6da;
+}
+
+/* label */
+.timeline-item span {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.9em;
+}
+
+/* tooltip */
+.tooltip {
+  visibility: hidden;
+  opacity: 0;
+
+  width: 240px;
+  background: rgba(30, 30, 40, 0.95);
+  color: white;
+  padding: 10px;
   border-radius: 8px;
+
+  position: absolute;
+  bottom: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  transition: all 0.3s ease;
 }
 
-.md-typeset a:hover {
+/* show tooltip */
+.timeline-item:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* center homepage */
+.md-content {
+  max-width: 750px;
+  margin: auto;
+  text-align: center;
+}
+
+/* social links */
+.social-links {
+  margin-top: 40px;
+}
+
+.social-links a {
+  margin: 0 15px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.social-links a:hover {
   color: #26c6da;
-  background-color: rgba(38,198,218,0.1);
 }
