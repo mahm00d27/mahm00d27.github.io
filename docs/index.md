@@ -1,35 +1,46 @@
 # Mahmoodur Rahman
 
-Senior Business Analyst | Data & Analytics | Global Health
+## Data & Analytics | Global Health | Public Systems
 
 📍 Vancouver, BC  
 📧 mahmoodnnb@gmail.com  
-🌐 https://sites.google.com/view/rmahmood  
 
 ---
 
-## About Me
+## 👋 About Me
 
-I am a data and analytics professional with a background in medicine, epidemiology, and data science.
+I am a data and analytics professional working at the intersection of health systems, epidemiology, and data science.
 
-Currently working with Stroke Services BC at PHSA, I focus on:
-- Reproducible analytics workflows
-- Health system performance monitoring
-- Translating complex data into actionable insights
-
----
-
-## Highlights
-
-- Business Analyst – Stroke Services BC (PHSA)
-- Former Research Investigator – icddr,b
-- UBC Master of Data Science
-- Collaborations with WHO, Harvard, Johns Hopkins
+Currently at **Stroke Services BC (PHSA)**, I focus on building:
+- reproducible analytics workflows  
+- integrated data systems  
+- decision-support tools  
 
 ---
 
-## Explore
+## 🚀 Highlights
 
-- Experience
-- Projects
-- Publications
+- Business Analyst — Stroke Services BC  
+- Former Research Investigator — icddr,b  
+- UBC Master of Data Science  
+- Collaborations with WHO, Harvard, Johns Hopkins  
+
+---
+
+## 🔎 Explore
+
+- → Experience  
+- → Projects  
+- → Publications  
+
+---
+
+## ⚙️ This Website
+
+This site is built with:
+
+- MkDocs + Material theme  
+- GitHub Actions CI/CD  
+- Automated deployment  
+
+👉 Fully reproducible and production-ready
