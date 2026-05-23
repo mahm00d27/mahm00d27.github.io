@@ -49,3 +49,13 @@ plugins:
 extra_css:
   - styles.cs
 
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/mahm00d27
+
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/YOUR-LINK
+
+    - icon: fontawesome/brands/x-twitter
+      link: https://twitter.com/YOUR-LINK
