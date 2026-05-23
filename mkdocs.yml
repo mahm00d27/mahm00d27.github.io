@@ -1,10 +1,14 @@
 site_name: Mahmoodur Rahman
+site_url: https://mahm00d27.github.io
 
 theme:
   name: material
+
   features:
     - navigation.tabs
     - navigation.top
+    - navigation.sections
+    - navigation.expand
 
   palette:
     - scheme: default
@@ -17,3 +21,13 @@ nav:
   - Experience: experience.md
   - Projects: projects.md
   - Publications: publications.md
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+``
