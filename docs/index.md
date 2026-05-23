@@ -31,11 +31,11 @@ Currently at **Stroke Services BC (PHSA)**, I focus on:
 
 ---
 
-## 🔎 Explore
+## 🚀 Explore
 
-- → Experience  
-- → Projects  
-- → Publications  
+- 📊 [Experience](experience.md)  
+- 🧠 [Projects](projects.md)  
+- 📚 [Publications](publications.md)  
 
 ---
 
