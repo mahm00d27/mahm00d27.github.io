@@ -26,9 +26,13 @@
 
 /* Interactive links */
 .md-typeset a {
-  transition: all 0.25s ease;
+  transition: all 0.25s ease;  
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
 }
 
 .md-typeset a:hover {
   color: #26c6da;
+  background-color: rgba(38,198,218,0.1);
 }
