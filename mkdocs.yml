@@ -3,7 +3,6 @@ site_url: https://mahm00d27.github.io
 
 theme:
   name: material
-
   features:
     - navigation.tabs
     - navigation.top
@@ -24,10 +23,9 @@ nav:
 
 markdown_extensions:
   - admonition
-  - codehilite
   - toc:
       permalink: true
+  - codehilite
 
 plugins:
   - search
-``
