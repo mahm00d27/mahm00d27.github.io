@@ -1,6 +1,6 @@
 # Mahmoodur Rahman
 
-<div style="font-size:1.2em; opacity:0.8;">
+<div style="font-size:1.2em; opacity:0.75;">
 Health Systems • Data • Analytics
 </div>
 
@@ -8,36 +8,48 @@ Health Systems • Data • Analytics
 
 ## 👨‍💻 Career Trajectory
 
-<div class="timeline">
+<div class="timeline-container">
 
-  <div class="timeline-item">
+  <div class="timeline-line"></div>
+
+  <div class="timeline-point" style="left: 5%;">
     <div class="dot"></div>
+    <div class="year">2016</div>
     <div class="tooltip">
       <strong>Research Investigator</strong><br>
       icddr,b<br>
-      Large-scale epidemiological and global health research.
+      Epidemiological and global health research
     </div>
-    <span>icddr,b</span>
   </div>
 
-  <div class="timeline-item">
+  <div class="timeline-point" style="left: 35%;">
     <div class="dot"></div>
+    <div class="year">2020</div>
     <div class="tooltip">
-      <strong>Data Science (MDS)</strong><br>
-      University of British Columbia<br>
-      Advanced training in data science and analytics.
+      <strong>Master of Data Science</strong><br>
+      UBC<br>
+      Training in modern data science and analytics
     </div>
-    <span>UBC</span>
   </div>
 
-  <div class="timeline-item">
+  <div class="timeline-point" style="left: 65%;">
     <div class="dot"></div>
+    <div class="year">2023</div>
+    <div class="tooltip">
+      <strong>Business Analyst</strong><br>
+      PHSA<br>
+      Health data systems and analytics
+    </div>
+  </div>
+
+  <div class="timeline-point" style="left: 90%;">
+    <div class="dot active"></div>
+    <div class="year">Now</div>
     <div class="tooltip">
       <strong>Senior Business Analyst</strong><br>
-      Stroke Services BC (PHSA)<br>
-      Health system analytics and decision support.
+      Stroke Services BC<br>
+      Leading analytics and decision support
     </div>
-    <span>PHSA</span>
   </div>
 
 </div>
@@ -48,8 +60,8 @@ Health Systems • Data • Analytics
 
 <div class="social-links">
 
-<a href="https://github.com/mahm00d27" target="_blank">GitHub</a>  
-<a href="https://linkedin.com/in/YOUR-LINK" target="_blank">LinkedIn</a>  
-<a href="https://orcid.org/YOUR-ID" target="_blank">ORCID</a>
+https://github.com/mahm00d27GitHub</a>  
+https://linkedin.com/in/YOUR-LINKLinkedIn</a>  
+https://orcid.org/YOUR-IDORCID</a>
 
 </div>
